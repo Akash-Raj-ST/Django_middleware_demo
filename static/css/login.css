@@ -1,0 +1,61 @@
+
+
+body{
+    height: 100vh;
+    padding-top: 5%;
+}
+
+.left{
+    padding-left: 15%;
+}
+
+.left_top{
+    margin-bottom: 40%;
+}
+
+.title{
+    font-size: 1.5rem;
+}
+
+.full_form{
+    font-size: 0.55rem;
+}
+
+.button{
+    margin: 10px;
+    font-size: 0.35rem;
+}
+
+#sign_up{
+    width: 125px;
+}
+
+#or{
+    font-size: 0.4rem;
+}
+
+#index_dp{
+    width: 80%;
+    height: 70%;
+}
+
+.right{
+    width: 60%;
+}
+
+@media only screen and (max-width:600px) {
+    .left{
+        width: 100%;
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+
+    .input_field{
+        width: 100%;
+    }
+
+    .right{
+        display: none;
+    }
+}
+

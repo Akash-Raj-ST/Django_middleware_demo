@@ -1,0 +1,44 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="{% static 'css/common.css' %}">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" href="{%static 'css/error.css' %}">
+
+    <title>RYT</title>
+</head>
+
+<body class="flex row">
+    {% include 'error.html' %}
+    <section class="left flex column width-fit border-box">
+
+        <div class="left_top flex column width-100">
+            <h1 class="title">RYT</h1>
+            <h3 class="full_form">Review Your Tour</h3>
+        </div>
+        
+        <form action="/" method="POST"  class="flex column" autocomplete="off">
+            {% csrf_token %}
+            <input type="text" id="username" class="input_field" name="username" placeholder="Username" required>
+            <input type="password" id="password" class="input_field" name="password" placeholder="Password" required>
+
+            <div class="selection">
+                <button type="submit" class="button flex center" id="visit">Visit</button>
+                <h4 id="or">OR</h4>
+            </div>         
+        </form>
+        <a href="register" class="selection">
+            <button type="submit" class="button flex center" id="sign_up">Sign Up</button>
+        </a>
+    </section>
+
+    <section class="right flex center">
+        <img id="index_dp" src="{% static 'img/index_img.svg' %}" alt="Wallpaper">
+    </section>
+</body>
+</html>

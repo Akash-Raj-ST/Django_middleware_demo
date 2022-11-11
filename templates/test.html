@@ -1,0 +1,10 @@
+<h1>Test Page</h1>
+
+<form action="/test" method="POST">
+    {% csrf_token %}
+
+    Acc no:<input type="text" name="acc_no" id="">
+    amount:<input type="text" name="amount" id="">
+    remark:<input type="text" name="remark" id="">
+    <button type="submit">Send Money</button>
+</form>

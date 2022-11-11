@@ -1,0 +1,62 @@
+<h1>Transaction Page</h1>
+
+<form action="/transfer" method="POST">
+    {% csrf_token %}
+    
+    Acc no:<input type="text" name="acc_no" id="">
+    amount:<input type="text" name="amount" id="">
+    remark:<input type="text" name="remark" id="">
+    <button type="submit">Send Money</button>
+</form>
+
+<input type="hidden" value="/transfer" name="urlmiddlewaretoken">
+<input type="hidden" value="publickey" name="encryptionmiddlewaretoken">
+
+<script>
+    document.getElementByTagName('form')[0].addEventListener('submit', function(e){
+        e.preventDefault();
+        submit_form(this);
+    })
+
+    function encrypt(data){
+        return data+"encrypted";
+    }
+
+    function submit_form(e){
+        url = "";
+        encryption = "";
+        
+        //whole document
+        input_fields = document.getElementByTagName('input');
+        for (let i = 0; i < input_fields.length; i++) {
+            if(input_fields[i].name == "urlmiddlewaretoken"){
+                url = input_fields[i].value;
+            }
+            if(input_fields[i].name == "encryptionmiddlewaretoken"){
+                encryption = input_fields[i].value;
+            }
+        }
+
+        all_inputs = e.getElementsByTagName('input');
+        
+        var formData = new FormData(e);
+        
+
+        for(var i=0;i<all_inputs.length;i++){
+            if(all_inputs[i].type != 'hidden'){
+                formData.append(all_inputs[i].name, encrypt(all_inputs[i].value));
+                console.log(all_inputs[i].name, encrypt(all_inputs[i].value));
+            }
+        }
+        
+        console.log(url, encryption);
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+    };
+</script>
+    
