@@ -2,7 +2,7 @@
 
 <form action="/test" method="POST">
     {% csrf_token %}
-
+    {{user_id}}
     Acc no:<input type="text" name="acc_no" id="">
     amount:<input type="text" name="amount" id="">
     remark:<input type="text" name="remark" id="">
