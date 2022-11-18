@@ -1,4 +1,5 @@
 #RSA implementation
+# python manage.py runserver 8001
 
 import Crypto
 from Crypto.Cipher import PKCS1_OAEP
@@ -15,11 +16,6 @@ def rsakeys():
     publickey = privatekey.publickey()
     return privatekey.export_key().decode(), publickey.export_key().decode()
 
-
-def encrypt(rsa_publickey,plain_text):
-    encryptor = PKCS1_OAEP.new(RSA.import_key(rsa_publickey))
-    encrypted = encryptor.encrypt(plain_text.encode())
-    return encrypted
 
 def decrypt(rsa_privatekey, cipher):
     print(cipher)
