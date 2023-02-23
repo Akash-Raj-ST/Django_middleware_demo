@@ -1,3 +1,5 @@
+# python manage.py runserver 8001
+
 from django.db import models
 
 from .cryptography import *
