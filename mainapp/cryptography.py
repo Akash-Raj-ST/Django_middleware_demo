@@ -1,36 +1,27 @@
-#RSA implementation
-# python manage.py runserver 8001
-
-import Crypto
-from Crypto.Cipher import PKCS1_OAEP
+from Crypto.Cipher import PKCS1_v1_5
 from Crypto.PublicKey import RSA
+from Crypto.Hash import SHA
 from Crypto import Random
-import base64
-import ast
-import json
 
-#to store in DB
+import base64
+
 def rsakeys():
     length = 1024
     privatekey = RSA.generate(length, Random.new().read)
     publickey = privatekey.publickey()
     return privatekey.export_key().decode(), publickey.export_key().decode()
 
+def decrypt(pri,ciphertext):
 
-def decrypt(rsa_privatekey, cipher):
-    print(cipher)
-    decryptor = PKCS1_OAEP.new(RSA.import_key(rsa_privatekey.encode()))
-    decrypted = decryptor.decrypt(ast.literal_eval(str(cipher)))
-    print('done',decrypted)
-    return decrypted
+    ciphertext = base64.b64decode(ciphertext)
+
+    key = RSA.importKey(pri)
+
+    dsize = SHA.digest_size
+    sentinel = Random.new().read(15+dsize)      # Let's assume that average data length is 15
 
 
-# text = "hello"
-# pri,pub = rsakeys()
-# # print(pub.decode())
-# cipher = encrypt(pub,text)
-# print(type(cipher))
+    cipher = PKCS1_v1_5.new(key)
+    message = cipher.decrypt(ciphertext,sentinel)
 
-# decrypt_text = decrypt(pri,cipher)
-# print(decrypt_text)
-
+    return str(message.decode())
