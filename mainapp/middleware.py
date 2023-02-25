@@ -8,6 +8,10 @@ from Crypto import Random
 import base64
 import ast
 
+import ast
+import random
+import os
+
 script = '''
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/2.3.1/jsencrypt.min.js"></script>
 
@@ -92,18 +96,27 @@ def formProtectionMiddleware(get_response):
         return s
 
     def middleware(request):
-       
+        pwd = os.path.dirname(__file__)
+
         global url_path
 
-        if(request.path!='/'):
-            url_path = request.path
-            
-            if(request.method=='POST'):
+        url_path = request.path
+        
+
+        if(request.method=='POST'):
+                
+
                 params = list(request.POST)
 
-                user = Users.objects.get(user_id=request.session['user_id'])
-                private_key = user.private_key
-                print("POST:")
+                id_val = request.session["id_val"]
+
+                with open(pwd+"/data.txt") as f:
+                    data = f.read()
+                data = ast.literal_eval(data)
+
+                private_key = data[id_val]['private_key']
+
+                print("POST in middleware:\n")
                 print(request.POST)
 
                 request.POST._mutable = True
@@ -111,22 +124,32 @@ def formProtectionMiddleware(get_response):
                     request.POST[k] = decrypt(private_key, request.POST[k])
 
                 for k in params:
-                    print("After decryption: ",request.POST[k])
+                    print("After decryption inside middleware:\n ",request.POST[k])
                 
 
         response = get_response(request)
         #----------------------------------------------
 
-        print(request.path)
-        if request.path != '/' and request.path != '/favicon.ico':
-            if 'html' in response.headers['content-type']:
-                print("user id:",request.session['user_id'])
-                user = Users.objects.get(user_id=request.session['user_id'])
-                public_key = user.public_key
+        if 'html' in response.headers['content-type']:
+                
+                id_val = random.randint(0,4)
+                print("random id:",id_val)
+
+                request.session['id_val'] = id_val
+
+                data = ""
+
+                with open(pwd+"/data.txt") as f:
+                    data = f.read()
+                data = ast.literal_eval(data)
+
+                public_key = data[id_val]['public_key']
+
+                print("public_key to send:\n",public_key)
+                
                 response.content += fields(url_path=url_path,public_key=public_key).encode()
                 response.content += script.encode()
 
-        
         return response
 
     return middleware

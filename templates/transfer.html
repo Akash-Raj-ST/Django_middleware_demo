@@ -1,11 +1,57 @@
-<h1>Transaction Page</h1>
+{% load static %}
 
-<form action="/transfer" method="POST">
-    {% csrf_token %}
-    
-    Acc no:<input type="text" name="acc_no" id="">
-    amount:<input type="text" name="amount" id="">
-    remark:<input type="text" name="remark" id="">
-    <button type="submit">Send Money</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/transfer.css' %}">
+</head>
+<body>
+    <div class="top_div">
+       <h3>Transaction Page</h3>
+        <div class="form_div">
+            <form action="/transfer" method="POST">
+                {% csrf_token %}
+                <div class="top_flex">
+                    <div class="flex_1">
+                        <div>
+                            <h3 class="txt">To</h3>
+                        </div>
+                        <div>
+                            <h3 class="txt">Amt</h3>
+                        </div>
+                    </div>
+                    <div class="flex_2">
+                        <div>
+                            <input type="text" name="receiver" id="user" class="in in_1">
+                        </div>
+                        <div>
+                            <p class="s_2" id="amt_value">Enter a valid amount</p>
+                            <p class="s_3" id="payment_method">select a option</p>
+                            <input type="number" class="in in_1" id="amt">
 
+                        </div>
+                    </div>
+                </div>
+                <div class="radio_div" id="payment">
+                    <input type="radio" id="r1" name="bank" value="RTGS">
+                    <label style="display:inline ;" for="rtgs">RTGS</label>
+                    <input type="radio" id="r2" name="bank" value="IMPS">
+                    <label style="display:inline ;" for="imps">IMPS</label>
+                    <input type="radio" id="r3" name="bank" value="NEFT">
+                    <label style="display:inline ;" for="neft">NEFT</label><br>
+                </div>
+                
+                <div class="btn_div">
+                    <button class="cancel">Cancel</button>
+                    <button type="submit" id="submit" class="submit">Submit</button>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+</body>
+</html>

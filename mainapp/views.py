@@ -17,6 +17,10 @@ def main(request):
         user.save()
         user_id = user.user_id
         request.session['user_id'] = user_id
+
+        print("Inside developer views function:\n")
+        print(username,password)
+
         return redirect(test)
 
 

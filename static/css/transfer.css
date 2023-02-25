@@ -1,0 +1,109 @@
+.top_div{
+    height: 100%;
+    width: 100%;
+}
+
+.top_flex{
+    display: flex;
+    justify-content:space-evenly;
+    width: 40%;
+    margin-left:17%;
+    position: relative;
+}
+
+.flex_1{
+    width:1%;
+}
+.s_1{
+    position: absolute;
+    margin-left:60% ;
+    width: 50%;
+    color: red;
+}
+
+.s_2{
+    position: absolute;
+    margin-left:75% ;
+    width: 50%;
+    color: red;
+    margin-top: 8%;
+}
+
+.s_3{
+    position: absolute;
+    margin-left:75%;
+    width: 50%;
+    color: red;
+    margin-top: 34%;
+}
+
+.flex_2{
+    width: 20%;
+}
+#amt_value{
+    display: none;
+}
+
+#payment_method{
+    display: none;
+}
+#select_optn{
+    display: none;
+}
+
+.in{
+    margin-top: 35%;
+    padding:3px;
+}
+.txt{
+    width:20%;
+    
+}
+.user_div{
+    margin-top: 5%;
+}
+
+.form_div{
+    border:3px solid black;
+    width: 600px;
+    height: 45%;
+    text-align: center;
+    margin: auto;
+    margin-top:8%;
+}
+
+.radio_div{
+    padding-top:4%;
+    width: fit-content;
+    margin-left:30%;
+}
+.btn_div{
+    padding:6%;
+    
+}
+.cancel{
+    background-color: red;
+    color:white;
+    font-weight: bold;
+    padding:1.5%;
+    border-radius: 3px;
+}
+.cancel:hover{
+    background-color: white;
+    color:red;
+    border-color: red;
+}
+.submit{
+    margin-left: 2px;
+    color:white;
+    font-weight: bold;
+    background-color: green;
+    padding:1.5%;
+    border-radius: 3px;
+}
+
+.submit:hover{
+    background-color: white;
+    color:green;
+    border-color: green;
+}
