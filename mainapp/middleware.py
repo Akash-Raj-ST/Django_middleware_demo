@@ -76,13 +76,13 @@ script = '''
             headers: {
                 'X-CSRFToken': csrf_value
             }
+        }).then((response)=>{
+                window.location = response.url;
         })
     };
 </script>
-    
-    
 '''
-
+    
 def formProtectionMiddleware(get_response):
     # One-time configuration and initialization.
     url_path = ""
@@ -104,7 +104,6 @@ def formProtectionMiddleware(get_response):
         
 
         if(request.method=='POST'):
-                
 
                 params = list(request.POST)
 
@@ -125,11 +124,17 @@ def formProtectionMiddleware(get_response):
 
                 for k in params:
                     print("After decryption inside middleware:\n ",request.POST[k])
+
                 
 
         response = get_response(request)
         #----------------------------------------------
 
+        redirect = 'Location' in response.headers
+
+        if redirect:
+            return response
+        
         if 'html' in response.headers['content-type']:
                 
                 id_val = random.randint(0,4)
