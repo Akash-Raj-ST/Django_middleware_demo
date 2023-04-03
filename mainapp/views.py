@@ -17,22 +17,33 @@ def main(request):
         user.save()
         user_id = user.user_id
         request.session['user_id'] = user_id
-        return redirect(test)
+
+        print("Inside developer views function:\n")
+        print(username,password)
+
+        return redirect(transfer)
 
 
 def transfer(request):
     if request.method == "GET":
         return render(request, 'transfer.html')
     else:
-        return render(request, 'transfer.html')
+        return redirect(success)
 
 
 def test(request):
     if request.method == "GET":
-        response = render(request, 'test.html')
-        return response
+        print("test view triggered")
+
+        return render(request, 'test.html')
     
     else:
-        return render(request, 'test.html',)
+        return render(request, 'success.html',)
+    
+
+def success(request):
+    if request.method == "GET":
+        print("Success")
+        return render(request, 'success.html')
 
 
