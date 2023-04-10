@@ -12,6 +12,15 @@ import ast
 import random
 import os
 
+'''
+    The below script is a javascript code which can be run in browser.
+    1.  Whenever the form is submitted the default operation is blocked by this code.
+        and "submit_form(this)" function is triggered.
+    2. Then we extarct the url,public_key,csrf_token from the form fields.
+    3. Then for each formdata, we encrypt that using "encrypt(data,public_key)" function.
+    4.Then we create new formdata, append all the formdata in it and send the request using fetch.
+'''
+
 script = '''
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jsencrypt/2.3.1/jsencrypt.min.js"></script>
 
@@ -82,11 +91,13 @@ script = '''
     };
 </script>
 '''
-    
+
+#this middleware is added in the settings.py
+
 def formProtectionMiddleware(get_response):
-    # One-time configuration and initialization.
     url_path = ""
 
+    #input fields which are hidden and used while encryption
     def fields(url_path,public_key):
         s = f'''
                 <input type="hidden" value="{url_path}" name="urlmiddlewaretoken">
@@ -94,8 +105,14 @@ def formProtectionMiddleware(get_response):
             '''
 
         return s
+    
 
+    #main middleware function
     def middleware(request):
+
+        #Below code executes after the request from client
+        #----------------------------------------------
+
         pwd = os.path.dirname(__file__)
 
         global url_path
@@ -104,11 +121,12 @@ def formProtectionMiddleware(get_response):
         
 
         if(request.method=='POST'):
-
+                #list all the params of formdata
                 params = list(request.POST)
 
                 id_val = request.session["id_val"]
 
+                #open the file containing private and public keys
                 with open(pwd+"/data.txt") as f:
                     data = f.read()
                 data = ast.literal_eval(data)
@@ -119,6 +137,8 @@ def formProtectionMiddleware(get_response):
                 print(request.POST)
 
                 request.POST._mutable = True
+
+                #decrypt every formdata value using private key
                 for k in params:
                     request.POST[k] = decrypt(private_key, request.POST[k])
 
@@ -128,22 +148,28 @@ def formProtectionMiddleware(get_response):
                 
 
         response = get_response(request)
+        #Below code executes after the response from controller
         #----------------------------------------------
 
         redirect = 'Location' in response.headers
 
+        #if the response is to redirect don't modify
         if redirect:
             return response
         
+        #if the response is of type html perform modification
         if 'html' in response.headers['content-type']:
                 
+                #generate randome value
                 id_val = random.randint(0,4)
                 print("random id:",id_val)
 
+                #set the id in the session header
                 request.session['id_val'] = id_val
 
                 data = ""
 
+                #fetch the public_key corresponding to id
                 with open(pwd+"/data.txt") as f:
                     data = f.read()
                 data = ast.literal_eval(data)
@@ -152,6 +178,7 @@ def formProtectionMiddleware(get_response):
 
                 print("public_key to send:\n",public_key)
                 
+                #append custom JS script and the fields in the html response
                 response.content += fields(url_path=url_path,public_key=public_key).encode()
                 response.content += script.encode()
 
